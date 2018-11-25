@@ -1,103 +1,74 @@
-// import { apiCall } from '../../services/api';
-import { addError } from './errors';
-import { LOAD_MOVIES, LOAD_GENRES, LOAD_CREW } from '../actionsTypes';
+import { apiCall, buildMovieObject } from '../../services/api';
+import { LOAD_MOVIES, ADD_NEW_MOVIE, DELETE_MOVIE, EDIT_MOVIE } from '../actionsTypes';
+import { format } from '../../services/validation';
 
 export const loadMovies = movies => ({
     type: LOAD_MOVIES,
     movies
 })
 
-export const loadGenres = genres => ({
-    type: LOAD_GENRES,
-    genres
+
+export const newMovie = new_movie => ({
+    type: ADD_NEW_MOVIE,
+    new_movie
 })
 
-export const loadCrew = crew => ({
-    type: LOAD_CREW,
-    crew
+export const delete_action = id => ({
+    type: DELETE_MOVIE,
+    id
 })
-// export const remove = tenantId => ({
-//     type: REMOVE_TENANT,
-//     tenantId
-// })
 
-// export const edit = tenant => ({
-//     type: EDIT_TENANT,
-//     tenant
-// })
+export const edit_action = (movie_data) => ({
+    type: EDIT_MOVIE,
+    movie_data
+})
 
-// export const removeTenant = (user_id, tenant_id) => {
-//     return dispatch => {
-//         return apiCall('delete', `/api/users/${user_id}/tenants/${tenant_id}`)
-//         .then(() => dispatch(remove(tenant_id)))
-//         .catch(err => dispatch(addError(err.message)));
-//     }
-// }
+export const deleteMovie = id => dispatch => {
+    try {
+        dispatch(delete_action(id));
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-// export const editTenant = (user_id, tenant_id, data) => {
-//     return dispatch => {
-//         return apiCall('post', `/api/users/${user_id}/tenants/${tenant_id}`, data)
-//         .then(res => console.log(res))
-//     }
-// }
-
-export const fetchGenres = (path) => {
-    return async dispatch => {
-        try {
-            let response = await fetch(`${path}`);
-            // console.log(response);
-            let data = await response.json();
-            // console.log(data);
-            dispatch(loadGenres(data.genres))
-        } catch (error) {
-            console.log(error);
-        }
+export const editMovie = (movie_data) => dispatch => {
+    let { title } = movie_data;
+    title = format(title);
+    console.log(movie_data);
+    movie_data["title"] = title;
+    try {
+        dispatch(edit_action(movie_data))
+    } catch (error) {
+        console.log(error);
     }
 }
 
 export const fetchMovies = (path) => {
     return async dispatch => {
         try {
-            let response = await fetch(`${path}`);
-            let data = await response.json();
-            let movies_array = data.results.map(movie => {
-                const {id, title, poster_path, genre_ids} = movie;
-                return {
-                    id,
-                    title,
-                    poster_path: `http://image.tmdb.org/t/p/w185${poster_path}`,
-                    genre_ids
-                }
+            let data = await apiCall(path);
+            let movies_array = await data.results.map(async movie => {
+                let array_object = buildMovieObject(movie);
+                return array_object
             })
-            dispatch(loadMovies(movies_array))
+            const movies = await Promise.all(movies_array);
+            dispatch(loadMovies(movies))
         } catch (error) {
             console.log(error);
         }
-    }
+     }
 }
 
-export const fetchCrew = (path) => {
-    return async dispatch => {
-        try {
-            let response = await fetch(`${path}`);
-            let data = await response.json();
-            console.log(data);
-            dispatch(loadCrew(data.crew))
-        } catch (error) {
-            console.log(error);
-        }
+export const addNewMovie = (movie_name) => async dispatch => {
+    movie_name = format(movie_name);
+    try {
+        const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=8dbba6937f575d84030716255ce61452&query=${movie_name}`);
+        const data = await response.json();
+        let new_movie = data.results[0];
+        const movie_object = await buildMovieObject(new_movie);
+        dispatch(newMovie(movie_object));
+    } catch (error) {
+        // addError("this movie is not exist");
+        console.log(error);
     }
 }
-
-// export const postNewTenant = tenantData => (dispatch, getState) => {
-//     console.log(tenantData);
-//     let {currentUser} = getState();
-//     const id = currentUser.user.id;
-//     return apiCall("post", `/api/users/${id}/tenants`, tenantData)
-//     .then(res => {
-//         console.log(res)
-//         return dispatch(loadMovies(res.tenants))
-//     })
-//     .catch(err => dispatch(addError(err.message)))
-// }
-

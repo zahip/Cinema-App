@@ -1,19 +1,15 @@
-import { LOAD_MOVIES, LOAD_GENRES , LOAD_CREW} from '../actionsTypes';
+import { LOAD_MOVIES, ADD_NEW_MOVIE, DELETE_MOVIE, EDIT_MOVIE} from '../actionsTypes';
 
-const initalState = {
-    movies: [],
-    genres: [],
-    crew: []
-};
-
-const movies = (state = initalState, action) => {
+const movies = (state = [], action) => {
     switch(action.type) {
         case LOAD_MOVIES:
-            return Object.assign({}, state, { movies: [...action.movies] });
-        case LOAD_GENRES:
-            return Object.assign({}, state, { genres: [...action.genres] });
-        case LOAD_CREW:
-            return Object.assign({}, state, { crew: [...action.crew] });
+            return [...action.movies];
+        case ADD_NEW_MOVIE:
+            return [action.new_movie, ...state];
+        case DELETE_MOVIE:
+            return [...state.filter(movie => movie.id !== action.id)];
+        case EDIT_MOVIE:
+            return [...state.map(movie=> movie.id === action.movie_data.id ? action.movie_data : movie)]
         default:
             return state;
     }

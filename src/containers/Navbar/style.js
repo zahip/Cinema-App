@@ -21,7 +21,7 @@ export const LogoImg = styled.img`
     height: 50px;
 `
 
-export const AuthBox = styled.div`
+export const AddBox = styled.div`
     display: flex;
     // border: 2px solid red;
     justify-content: center;

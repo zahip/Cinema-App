@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const ListContainer = styled.div`
-
+    // background-color: black;
 `
 
 export const ListBox = styled.div`
