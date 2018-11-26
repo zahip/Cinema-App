@@ -13,15 +13,20 @@ export const Form = styled.form`
     align-items: center;
 `
 
-export const Error = styled.div`
+export const Error = styled.p`
     color: red;
-    max-height: 80px;
     text-align: center;
+    @media (min-width: 768px) {
+        font-size: 20px;
+    }
 `
 
 export const InputBoxes = styled.div`
 `
 
+export const DeleteContent = styled.p`
+    font-size: 16px;
+`
 export const InputBox = styled.div`
     display: flex;
     align-items: center;
@@ -31,12 +36,12 @@ export const InputBox = styled.div`
 export const Label = styled.label`
     flex-basis: 25%;
     color: ${props => props.error ? "red": "black"};
+
 `
 
 
 export const Input = styled.input`
     height: 20px;
-    // border: none;
     border: 1px solid black; 
     border-radius: 10px;
     outline: none;
@@ -44,11 +49,15 @@ export const Input = styled.input`
     padding-left: 10px;
     flex-basis: 75%
 
+    @media (min-width: 768px) {
+        height: 30px;
+    }
+
 `
 
 export const Button = styled.button`
     font-size: 20px;
-    background-color: aqua;
+    background-color: darkmagenta;
     border: none;
     border-radius: 20px;
     width: 150px;

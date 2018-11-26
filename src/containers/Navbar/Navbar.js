@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { handleModal } from '../../store/actions/modal';
-import { NavBarBox, LogoContainer, LogoImg, AddBox } from './style';
-import Logo from '../../images/tenants-img.png';
+import { NavBarBox, LogoContainer, LogoImg, AddBox, AddIcon } from './style';
+import Logo from '../../images/cinema.jpg';
+import addIcon from '../../images/add.svg';
 
 class Navbar extends Component {
     
@@ -17,7 +18,7 @@ class Navbar extends Component {
                     </Link>
                 </LogoContainer>
                 <AddBox>
-                    <div onClick={() => handleModal({isOpen:"open", type: "add"})}>Add New Movie</div>
+                    <AddIcon src={addIcon} alt="add" onClick={() => handleModal({isOpen:"open", type: "add"})}></AddIcon>
                  </AddBox>
             </NavBarBox>
         );

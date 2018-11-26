@@ -1,24 +1,18 @@
 import moment from 'moment';
 
 export const check_validation = (data) => {
-    const {title, year, runtime, genre, director } = data;
     const error = {};
-    if(!title) {
-        error['error_title'] = "title";
+    for (const item of Object.entries(data)) {
+        if(item[1] === '') {
+            error[`${item[0]}`] = true;
+        }
+        if(item[0] === 'year') {
+            if(!moment(data.year).isValid() || data.year.length !== 4) {
+                error[`${item[0]}`] = true;
+            }
+        }
     }
-    if(!runtime) {
-        error['error_runtime'] = "runtime";
-    }
-    if(!genre) {
-        error['error_genre'] = "genre";
-    }
-    if(!director) {
-        error['error_director'] = "director";
-    }
-    if(!moment(year).isValid()) {
-        error['error_year'] =  "year";
-    }
-      return error;
+    return error;
 }
 
 

@@ -13,7 +13,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <Router>
-        <div className="app">
+        <div>
           <Navbar/>
           <Main/>
         </div>

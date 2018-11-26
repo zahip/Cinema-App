@@ -1,6 +1,8 @@
 import { apiCall, buildMovieObject } from '../../services/api';
 import { LOAD_MOVIES, ADD_NEW_MOVIE, DELETE_MOVIE, EDIT_MOVIE } from '../actionsTypes';
+import { addError, removeError } from '../actions/errors';
 import { format } from '../../services/validation';
+import { handleModal } from './modal';
 
 export const loadMovies = movies => ({
     type: LOAD_MOVIES,
@@ -23,24 +25,15 @@ export const edit_action = (movie_data) => ({
     movie_data
 })
 
-export const deleteMovie = id => dispatch => {
-    try {
-        dispatch(delete_action(id));
-    } catch (error) {
-        console.log(error);
-    }
+export const deleteMovie = id => {
+        return delete_action(id);
 }
 
-export const editMovie = (movie_data) => dispatch => {
+export const editMovie = (movie_data) => {
     let { title } = movie_data;
     title = format(title);
-    console.log(movie_data);
     movie_data["title"] = title;
-    try {
-        dispatch(edit_action(movie_data))
-    } catch (error) {
-        console.log(error);
-    }
+    return edit_action(movie_data);
 }
 
 export const fetchMovies = (path) => {
@@ -54,7 +47,7 @@ export const fetchMovies = (path) => {
             const movies = await Promise.all(movies_array);
             dispatch(loadMovies(movies))
         } catch (error) {
-            console.log(error);
+            dispatch(addError("Please try again later, there is problem with the server"));
         }
      }
 }
@@ -66,9 +59,10 @@ export const addNewMovie = (movie_name) => async dispatch => {
         const data = await response.json();
         let new_movie = data.results[0];
         const movie_object = await buildMovieObject(new_movie);
+        dispatch(removeError());
+        dispatch(handleModal({isOpen: "close"}));
         dispatch(newMovie(movie_object));
     } catch (error) {
-        // addError("this movie is not exist");
-        console.log(error);
+        dispatch(addError("this movie is not exist"));
     }
 }

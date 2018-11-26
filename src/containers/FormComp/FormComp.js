@@ -8,9 +8,11 @@ import {
   editMovie,
   deleteMovie
 } from "../../store/actions/movies";
+import moment from 'moment';
 import {
   FormContainer,
   Form,
+  DeleteContent,
   Error,
   InputBox,
   Label,
@@ -38,24 +40,8 @@ class FormComp extends Component {
   componentDidMount() {
     const { type } = this.props;
     if (type === "edit") {
-      const {
-        title,
-        year,
-        genre,
-        runtime,
-        director,
-        id,
-        poster_path
-      } = this.props.movie_data;
-      this.setState({
-        id,
-        title,
-        year,
-        genre,
-        runtime,
-        director,
-        poster_path
-      });
+      const {title,year,genre,runtime,director,id,poster_path} = this.props.movie_data;
+      this.setState({id,title,year,genre,runtime,director,poster_path});
     }
     if (type === "delete") {
       const { id } = this.props.movie_data;
@@ -66,8 +52,11 @@ class FormComp extends Component {
   }
 
   handleChange = e => {
-    const { removeError } = this.props;
-    removeError();
+    const { removeError, errors } = this.props;
+    if(errors.errorMessage !== "") {
+      removeError();
+    }
+    
     this.setState({
       [e.target.name]: e.target.value,
       error: {
@@ -89,32 +78,40 @@ class FormComp extends Component {
       deleteMovie,
       movies,
       addError,
-      removeError
+      removeError,
     } = this.props;
     const { title, id } = this.state;
     e.preventDefault();
     if (type === "add") {
       const isExist = checkExist(movies, title);
       if(!isExist) {
-        addNewMovie(title);
-        handleModal({ isOpen: "close" });
-      } else {
+          if(title !== '') {
+            addNewMovie(title);
+        } else {
+          addError('Please fill the field');
+        }
+      }else {
         addError(`the movie ${title} is existing`);
       }
     }
     if (type === "edit") {
-      const error = check_validation(this.state);
-      let error_message = "";
-      if(!Object.values(error).includes("")){
-        this.setState({error});
-        if(error.error_year === "year") {
-          error_message += "Please insert a valid year YYYY\n"; 
+      const errorObject = check_validation(this.state);
+      this.setState({error: errorObject});
+      let errorMessage = '';
+      if(Object.keys(errorObject).length > 0){
+      errorMessage = "Please fill "
+      }
+      for (const item in errorObject) {
+        if(errorObject[item] === true) {
+          errorMessage += `${item}, \n`;
         }
-        if(error.error_genre !== "" || error.error_title !== "" || error.error.runtime !== "" || error.error.director ) {
-          error_message += "Please fill all the fields";
-        }
-          addError(error_message);
-      } else {
+      }
+     if(!moment(this.state.year).isValid() || this.state.year.length !== 4) {
+        errorMessage +=  "Pleae insert a valid year YYYY\n";
+    }
+    if(Object.keys(errorObject).length > 0) {
+      addError(errorMessage);
+    } else {
         removeError();
         const isExist = checkExist(movies, title);
         if(!isExist) {
@@ -124,21 +121,19 @@ class FormComp extends Component {
           addError(`the movie ${title} is existing`);
         }
       }
-    }
-    if (type === "delete") {
+    if(type === "delete") {
       deleteMovie(id);
       handleModal({ isOpen: "close" });
     }
-  };
-
+  }
+}
   render() {
     const { title, year, runtime, genre, director, error } = this.state;
-    const {error_title, error_year, error_runtime, error_genre, error_director} = error;
     const { type, errors } = this.props;
     let editForm = (
       <InputBoxes>
         <InputBox>
-          <Label error={error_title}>Title:</Label>
+          <Label error={error.title}>Title:</Label>
           <div>
             <Input
               type="text"
@@ -149,7 +144,7 @@ class FormComp extends Component {
           </div>
         </InputBox>
         <InputBox>
-          <Label error={error_year}>Year:</Label>
+          <Label error={error.year}>Year:</Label>
           <div>
             <Input
               type="text"
@@ -160,7 +155,7 @@ class FormComp extends Component {
           </div>
         </InputBox>
         <InputBox>
-          <Label error={error_runtime}>Runtime:</Label>
+          <Label error={error.runtime}>Runtime:</Label>
           <div>
             <Input
               type="text"
@@ -171,7 +166,7 @@ class FormComp extends Component {
           </div>
         </InputBox>
         <InputBox>
-          <Label error={error_genre}>Genre:</Label>
+          <Label error={error.genre}>Genre:</Label>
           <div>
             <Input
               type="text"
@@ -182,7 +177,7 @@ class FormComp extends Component {
           </div>
         </InputBox>
         <InputBox>
-          <Label error={error_director}>Director:</Label>
+          <Label error={error.director}>Director:</Label>
           <div>
             <Input
               type="text"
@@ -195,30 +190,31 @@ class FormComp extends Component {
       </InputBoxes>
     );
 
+    let addForm = <div>
+      <InputBox>
+        <Label>Title:</Label>
+        <div>
+          <Input
+            type="text"
+            name="title"
+            value={title}
+            onChange={this.handleChange}
+          />
+        </div>
+</InputBox>
+    </div>
+
     return (
       <FormContainer>
         <Form onSubmit={this.handleSubmit}>
-          <TitleForm>{type}</TitleForm>
-          {errors.errorMessage && (
+          <TitleForm>{type.charAt(0).toUpperCase() + type.slice(1)} Form</TitleForm>
+          {errors.errorMessage !== "" && (
             <Error>{errors.errorMessage}</Error>
           )}
           {type === "delete" && (
-            <h1>Are you sure that you want to delete this movie ?</h1>
+            <DeleteContent>Are you sure that you want to delete this movie ?</DeleteContent>
           )}
-          {type === "add" && (
-            <InputBox>
-              <Label>Title:</Label>
-              <div>
-                <Input
-                  type="text"
-                  name="title"
-                  value={title}
-                  onChange={this.handleChange}
-                />
-              </div>
-            </InputBox>
-          )}
-
+          {type === "add" && (addForm)}
           {type === "edit" && editForm}
           <Button type="submit">Accept</Button>
         </Form>

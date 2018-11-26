@@ -1,15 +1,19 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 export const NavBarBox = styled.div`
     height: 60px;
-    background-color: aqua;
+    background-color: darkmagenta;
     display: flex;
     justify-content: space-between;
+    position: fixed;
+    width: 100%;
+
+    @media (min-width: 768px) {
+        height: 80px;
+    }
 `
 
 export const LogoContainer = styled.div`
-    // border: 2px solid red;
      flex-basis: 20%;
      display: flex;
      justify-content: center;
@@ -19,30 +23,25 @@ export const LogoContainer = styled.div`
 export const LogoImg = styled.img`
     width: 50px;
     height: 50px;
+
+    @media (min-width: 768px){
+        width: 70px;
+        height: 70px;
+    }
 `
 
 export const AddBox = styled.div`
     display: flex;
-    // border: 2px solid red;
     justify-content: center;
     align-items: center;
-    // width: 200px;
-`
-export const UnorderList = styled.ul`
-     display: flex;
-     justify-content: space-around;
-    //  border: 2px solid black;
-     width: 150px;
-`
-
-export const Tab = styled.li`
-    list-style-type: none;
-
-`
-
-export const TextLink = styled(Link)`
-    text-decoration: none;
-    color: black;
-    font-weight: bold; 
+    cursor: pointer;
     
+    @media (min-width: 768px){
+        width: 70px;
+        height: 70px;
+    }
+`
+export const AddIcon = styled.img`
+    width: 50px;
+    height: 50px;
 `

@@ -11,15 +11,11 @@ export const actionModal = (data) => ({
 
 
 export const handleModal = (modal_data) => {
-    console.log(modal_data)
     return dispatch => {
         try {
             let is_open;
-            // console.log(modal_data.isOpen);
-
             modal_data.isOpen === "open" ? is_open = true : is_open = false;
             modal_data["isOpen"] = is_open;
-            // modal_data.is_open = modal;
             dispatch(actionModal(modal_data));
         } catch (error) {
             console.log(error);
