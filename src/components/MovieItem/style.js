@@ -3,8 +3,8 @@ import styled from 'styled-components';
 export const Card = styled.div`
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    margin-top: 100px;
-    flex-basis: 80%;
+    margin-top: 66px;
+    flex-basis: 55%;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -18,6 +18,7 @@ export const Card = styled.div`
         margin-left: 20px;
         margin-right: 20px;
         flex-basis: calc(50% - 80px);
+        margin-top: 100px;
     }
 
     @media(min-width: 1024px) {
@@ -31,9 +32,12 @@ export const Card = styled.div`
 `
 
 export const CardImg = styled.img`
-    width: 100%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    @media (min-width: 768px) {
+        width: 100%;
+    }
+
     @media(min-width: 1024px) {
         height: 100%;
     }
@@ -70,7 +74,10 @@ export const Details = styled.span`
         font-size: 20px;
     }
 
-    
+    @media (min-width: 1200px) {
+        font-size: 15px;
+     }
+
 
 `
 
@@ -79,6 +86,11 @@ export const Value = styled.div`
     @media (min-width: 768px) {
         font-size: 20px;
     }
+
+    @media (min-width: 1200px) {
+        font-size: 15px;
+    }
+
 
 
 `

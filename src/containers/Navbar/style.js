@@ -35,6 +35,7 @@ export const AddBox = styled.div`
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    margin-right: 10px;
     
     @media (min-width: 768px){
         width: 70px;

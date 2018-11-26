@@ -19,7 +19,8 @@ import {
   Input,
   InputBoxes,
   Button,
-  TitleForm
+  TitleForm,
+  InputCont
 } from "./style";
 
 class FormComp extends Component {
@@ -56,7 +57,6 @@ class FormComp extends Component {
     if(errors.errorMessage !== "") {
       removeError();
     }
-    
     this.setState({
       [e.target.name]: e.target.value,
       error: {
@@ -136,80 +136,80 @@ class FormComp extends Component {
       <InputBoxes>
         <InputBox>
           <Label error={error.title}>Title:</Label>
-          <div>
+          <InputCont>
             <Input
               type="text"
               name="title"
               value={title}
               onChange={this.handleChange}
             />
-          </div>
+          </InputCont>
         </InputBox>
         <InputBox>
           <Label error={error.year}>Year:</Label>
-          <div>
+          <InputCont>
             <Input
               type="text"
               name="year"
               value={year}
               onChange={this.handleChange}
             />
-          </div>
+          </InputCont>
         </InputBox>
         <InputBox>
           <Label error={error.runtime}>Runtime:</Label>
-          <div>
+          <InputCont>
             <Input
               type="text"
               name="runtime"
               value={runtime}
               onChange={this.handleChange}
             />
-          </div>
+          </InputCont>
         </InputBox>
         <InputBox>
           <Label error={error.genre}>Genre:</Label>
-          <div>
+          <InputCont>
             <Input
               type="text"
               name="genre"
               value={genre}
               onChange={this.handleChange}
             />
-          </div>
+          </InputCont>
         </InputBox>
         <InputBox>
           <Label error={error.director}>Director:</Label>
-          <div>
+          <InputCont>
             <Input
               type="text"
               name="director"
               value={director}
               onChange={this.handleChange}
             />
-          </div>
+          </InputCont>
         </InputBox>
       </InputBoxes>
     );
 
-    let addForm = <div>
+    let addForm = <InputBoxes>
       <InputBox>
         <Label>Title:</Label>
-        <div>
+        <InputCont>
           <Input
             type="text"
             name="title"
             value={title}
             onChange={this.handleChange}
           />
-        </div>
+        </InputCont>
 </InputBox>
-    </div>
+    </InputBoxes>
 
     return (
       <FormContainer>
         <Form onSubmit={this.handleSubmit}>
-          <TitleForm>{type.charAt(0).toUpperCase() + type.slice(1)} Form</TitleForm>
+          <TitleForm>{type.charAt(0).toUpperCase() + type.slice(1)} Movie</TitleForm>
           {errors.errorMessage !== "" && (
             <Error>{errors.errorMessage}</Error>
           )}
@@ -218,7 +218,7 @@ class FormComp extends Component {
           )}
           {type === "add" && (addForm)}
           {type === "edit" && editForm}
-          <Button type="submit">Accept</Button>
+          <Button type="submit">{type.toUpperCase()}</Button>
         </Form>
       </FormContainer>
     );

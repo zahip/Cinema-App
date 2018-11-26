@@ -22,10 +22,7 @@ export const ModalContent = styled.div`
     border-radius: 10px;
 
     @media (min-width: 768px){
-        width: 50%;
-    }
-    @media (min-width: 1024px) {
-        width: 25%;
+        width: 70%;
     }
 
 `
