@@ -121,12 +121,14 @@ class FormComp extends Component {
           addError(`the movie ${title} is existing`);
         }
       }
+    }
     if(type === "delete") {
+
       deleteMovie(id);
       handleModal({ isOpen: "close" });
     }
   }
-}
+
   render() {
     const { title, year, runtime, genre, director, error } = this.state;
     const { type, errors } = this.props;

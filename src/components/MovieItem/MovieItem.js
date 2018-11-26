@@ -26,7 +26,7 @@ const MovieItem = ({ id, title, year, poster_path, genre, handle_modal, runtime,
                 </DetailsContainer>
                 <IconContainer>
                     <EditIcon src={editIcon} alt="edit" onClick={handleEdit}></EditIcon>
-                    <DeleteIcon delete src={deleteIcon} alt="delete" onClick={handleDelete}></DeleteIcon>
+                    <DeleteIcon src={deleteIcon} alt="delete" onClick={handleDelete}></DeleteIcon>
                 </IconContainer>
             </Container>
         </Card>
